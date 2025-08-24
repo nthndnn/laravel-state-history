@@ -15,12 +15,20 @@ class StateTransitionBlockedException extends Exception
         ?string $modelClass = null,
         ?string $reason = null
     ) {
-        $modelInfo = $modelClass ? " for {$modelClass}" : '';
+        $modelInfo = $modelClass ? sprintf(' for %s', $modelClass) : '';
         $guardClass = get_class($guard);
-        $reasonInfo = $reason ? ": {$reason}" : '';
+        $reasonInfo = $reason ? sprintf(': %s', $reason) : '';
         $fromText = $from ?? 'null (new model)';
 
-        $message = "State transition from '{$fromText}' to '{$to}' for field '{$field}'{$modelInfo} was blocked by guard {$guardClass}{$reasonInfo}.";
+        $message = sprintf(
+            "State transition from '%s' to '%s' for field '%s'%s was blocked by guard %s%s.",
+            $fromText,
+            $to,
+            $field,
+            $modelInfo,
+            $guardClass,
+            $reasonInfo
+        );
 
         parent::__construct($message);
     }

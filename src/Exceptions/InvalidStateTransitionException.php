@@ -12,9 +12,15 @@ class InvalidStateTransitionException extends Exception
         string $field,
         ?string $modelClass = null
     ) {
-        $modelInfo = $modelClass ? " for {$modelClass}" : '';
+        $modelInfo = $modelClass ? sprintf(' for %s', $modelClass) : '';
         $fromText = $from ?? 'null (new model)';
-        $message = "Invalid state transition from '{$fromText}' to '{$to}' for field '{$field}'{$modelInfo}. This transition is not allowed by the state machine.";
+        $message = sprintf(
+            "Invalid state transition from '%s' to '%s' for field '%s'%s. This transition is not allowed by the state machine.",
+            $fromText,
+            $to,
+            $field,
+            $modelInfo
+        );
 
         parent::__construct($message);
     }

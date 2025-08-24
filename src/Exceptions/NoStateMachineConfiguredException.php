@@ -10,8 +10,8 @@ class NoStateMachineConfiguredException extends Exception
         string $field,
         ?string $modelClass = null
     ) {
-        $modelInfo = $modelClass ? " for {$modelClass}" : '';
-        $message = "No state machine configured for field '{$field}'{$modelInfo}.";
+        $modelInfo = $modelClass ? sprintf(' for %s', $modelClass) : '';
+        $message = sprintf("No state machine configured for field '%s'%s.", $field, $modelInfo);
 
         parent::__construct($message);
     }

@@ -11,10 +11,14 @@ class InvalidStateMachineConfigurationException extends Exception
         mixed $config,
         ?string $modelClass = null
     ) {
-        $modelInfo = $modelClass ? " for {$modelClass}" : '';
+        $modelInfo = $modelClass ? sprintf(' for %s', $modelClass) : '';
         $configType = is_object($config) ? get_class($config) : gettype($config);
-        $message = "Invalid state machine configuration for field '{$field}'{$modelInfo}. " .
-                  "Expected string or array with 'machine' key, got {$configType}.";
+        $message = sprintf(
+            "Invalid state machine configuration for field '%s'%s. Expected string or array with 'machine' key, got %s.",
+            $field,
+            $modelInfo,
+            $configType
+        );
 
         parent::__construct($message);
     }
