@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: Test on PHP ${{ matrix.php-version }} with Laravel ${{ matrix.laravel-version }}
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: [8.2, 8.3]
+        laravel-version: [11.*, 12.*]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite
+          coverage: none
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-interaction
+
+      - name: Check code formatting
+        run: composer format-test
+
+      - name: Run tests
+        run: composer test
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results-php-${{ matrix.php-version }}-laravel-${{ matrix.laravel-version }}
+          path: |
+            .phpunit.result.cache
+            .phpunit.result.xml

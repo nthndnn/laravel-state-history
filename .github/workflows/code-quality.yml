@@ -1,0 +1,51 @@
+name: Code Quality
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  code-quality:
+    name: Code Quality Checks
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.3
+          extensions: mbstring, xml, ctype, iconv, intl
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-interaction
+
+      - name: Check code formatting with Pint
+        run: composer format-test
+
+      - name: Check for syntax errors
+        run: php -l src/
+        continue-on-error: false
+
+      - name: Check for syntax errors in tests
+        run: php -l tests/
+        continue-on-error: false
+
+      - name: Validate composer.json
+        run: composer validate --strict
+
+      - name: Check for security vulnerabilities
+        run: composer audit --format=json --output=composer-audit.json
+        continue-on-error: true
+
+      - name: Upload security audit results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: security-audit
+          path: composer-audit.json

@@ -1,0 +1,56 @@
+{
+  "name": "nathandunn/laravel-state-history",
+  "description": "Laravel package for managing enum-based model states with enforced transitions and automatic status history tracking.",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Nathan Dunn",
+      "email": "github@nathandunn.uk",
+      "role": "Developer",
+      "homepage": "https://nathandunn.uk"
+    }
+  ],
+  "require": {
+    "php": "^8.2",
+    "laravel/framework": "^11.0|^12.0",
+    "illuminate/database": "^11.0|^12.0",
+    "illuminate/support": "^11.0|^12.0"
+  },
+  "require-dev": {
+    "laravel/pint": "^1.24",
+    "mockery/mockery": "^1.6",
+    "orchestra/testbench": "^9.0|^10.0",
+    "phpunit/phpunit": "^10.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "NathanDunn\\StateHistory\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "NathanDunn\\StateHistory\\Tests\\": "tests/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "NathanDunn\\StateHistory\\StateHistoryServiceProvider"
+      ]
+    }
+  },
+  "config": {
+    "sort-packages": true,
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
+  },
+  "scripts": {
+    "format": "pint",
+    "format-test": "pint --test",
+    "test": "phpunit"
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true
+}

@@ -1,0 +1,87 @@
+name: Dependencies
+
+on:
+  schedule:
+    # Run every Monday at 9 AM UTC
+    - cron: "0 9 * * 1"
+  workflow_dispatch: # Allow manual triggering
+
+jobs:
+  dependencies:
+    name: Check Dependencies
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.3
+          extensions: mbstring, xml, ctype, iconv, intl
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-interaction
+
+      - name: Check for outdated packages
+        run: composer outdated --direct --format=json --output=composer-outdated.json
+        continue-on-error: true
+
+      - name: Check for security vulnerabilities
+        run: composer audit --format=json --output=composer-audit.json
+        continue-on-error: true
+
+      - name: Upload dependency check results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dependency-checks
+          path: |
+            composer-outdated.json
+            composer-audit.json
+
+      - name: Create issue for security vulnerabilities
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            let auditData = {};
+
+            try {
+              const auditContent = fs.readFileSync('composer-audit.json', 'utf8');
+              auditData = JSON.parse(auditContent);
+            } catch (error) {
+              console.log('No audit data found');
+            }
+
+            if (auditData.advisories && Object.keys(auditData.advisories).length > 0) {
+              const issueTitle = '🚨 Security vulnerabilities detected in dependencies';
+              const issueBody = `## Security Alert
+              
+              Security vulnerabilities were detected in the package dependencies.
+              
+              ### Vulnerabilities Found:
+              ${Object.values(auditData.advisories).map(adv => 
+                `- **${adv.packageName}** (${adv.affectedVersions}): ${adv.title}`
+              ).join('\n')}
+              
+              ### Recommended Actions:
+              1. Review the vulnerabilities above
+              2. Update affected packages to secure versions
+              3. Test thoroughly after updates
+              4. Consider using \`composer audit --fix\` if available
+              
+              ---
+              *This issue was automatically created by GitHub Actions*`;
+              
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: issueTitle,
+                body: issueBody,
+                labels: ['security', 'dependencies', 'automated']
+              });
+            }
