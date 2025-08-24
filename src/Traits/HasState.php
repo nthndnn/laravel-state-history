@@ -154,7 +154,7 @@ trait HasState
 
         $latestState = $this->latestState($field);
 
-        return $latestState ? $latestState->to : null;
+        return $latestState ? $latestState->getRawOriginal('to') : null;
     }
 
     /**
