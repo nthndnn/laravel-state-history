@@ -6,7 +6,7 @@ A Laravel package for managing **enum-based model states** with enforced transit
 
 - **Native PHP Enums** (PHP 8.2+)
 - **Enforced Transitions** with a pluggable state machine
-- **Automatic History** with metadata & correlation IDs
+- **Automatic History** with metadata
 - **Smart Casting** of historical `from`/`to` values (enums, dates, primitives, custom casts)
 - **Atomic Operations** – state change + history in one transaction
 - **Current State Columns** (`current_{field}`) for indexing & querying
@@ -203,7 +203,7 @@ Config (`config/state-history.php`):
 return [
     'use_current_columns' => true,
     'prefix' => 'current_',
-    'model' => \App\Models\CustomModelState::class,
+    'model' => \App\Models\CustomStateHistory::class,
 ];
 ```
 

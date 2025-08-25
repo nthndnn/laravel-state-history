@@ -43,9 +43,9 @@ return [
     |--------------------------------------------------------------------------
     |
     | The model class to use for state history records. This should be a class
-    | that extends the base ModelState model.
+    | that extends the base StateHistory model.
     |
     */
 
-    'model' => env('STATE_HISTORY_MODEL', \NathanDunn\StateHistory\Models\ModelState::class),
+    'model' => env('STATE_HISTORY_MODEL', \NathanDunn\StateHistory\Models\StateHistory::class),
 ];

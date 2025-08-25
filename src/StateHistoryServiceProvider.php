@@ -26,7 +26,7 @@ class StateHistoryServiceProvider extends ServiceProvider
         ], 'config');
 
         $this->publishes([
-            __DIR__ . '/../database/migrations/create_model_states_table.php.stub' => database_path('migrations/' . date('Y_m_d_His') . '_create_model_states_table.php'),
+            __DIR__ . '/../database/migrations/create_state_histories_table.php.stub' => database_path('migrations/' . date('Y_m_d_His') . '_create_state_histories_table.php'),
         ], 'migrations');
     }
 }

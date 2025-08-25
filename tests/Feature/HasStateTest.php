@@ -37,7 +37,7 @@ class HasStateTest extends TestCase
             $table->timestamps();
         });
 
-        $this->app['db']->connection()->getSchemaBuilder()->create('model_states', function (Blueprint $table) {
+        $this->app['db']->connection()->getSchemaBuilder()->create('state_histories', function (Blueprint $table) {
             $table->id();
             $table->string('model_type');
             $table->unsignedBigInteger('model_id');
@@ -269,7 +269,7 @@ class HasStateTest extends TestCase
     {
         // Test that the package uses the configured model class
         $this->assertEquals(
-            \NathanDunn\StateHistory\Models\ModelState::class,
+            \NathanDunn\StateHistory\Models\StateHistory::class,
             config('state-history.model')
         );
 

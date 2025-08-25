@@ -12,7 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('model_states', function (Blueprint $table) {
+        Schema::create('state_histories', function (Blueprint $table) {
             $table->id();
             $table->morphs('model');
             $table->string('field');
@@ -36,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('model_states');
+        Schema::dropIfExists('state_histories');
     }
 };

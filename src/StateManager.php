@@ -14,7 +14,7 @@ use NathanDunn\StateHistory\Events\StateTransitioned;
 use NathanDunn\StateHistory\Events\StateTransitioning;
 use NathanDunn\StateHistory\Exceptions\InvalidStateTransitionException;
 use NathanDunn\StateHistory\Exceptions\StateTransitionBlockedException;
-use NathanDunn\StateHistory\Models\ModelState;
+use NathanDunn\StateHistory\Models\StateHistory;
 use NathanDunn\StateHistory\Support\StateMachineConfig;
 
 class StateManager
@@ -117,7 +117,7 @@ class StateManager
             }
         }
 
-        $latestState = app(ModelState::class)
+        $latestState = app(StateHistory::class)
             ->where('model_type', get_class($model))
             ->where('model_id', $model->getKey())
             ->where('field', $field)

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Facades\Schema;
 use NathanDunn\StateHistory\Exceptions\NoStateMachineConfiguredException;
-use NathanDunn\StateHistory\Models\ModelState;
+use NathanDunn\StateHistory\Models\StateHistory;
 use NathanDunn\StateHistory\StateManager;
 use NathanDunn\StateHistory\Support\StateMachineConfig;
 
@@ -65,7 +65,7 @@ trait HasState
     /**
      * Get the latest state for a specific field.
      */
-    public function latestState(string $field): ?ModelState
+    public function latestState(string $field): ?StateHistory
     {
         return $this->states($field)->first();
     }
