@@ -285,6 +285,24 @@ class HasStateTest extends TestCase
         $relatedModel = $states->getRelated();
         $this->assertInstanceOf(config('state-history.model'), $relatedModel);
     }
+
+    #[Test]
+    public function it_handles_same_state_transitions_silently()
+    {
+        $model = new TestModel;
+        $model->current_state = TestState::Draft->value;
+        $model->save();
+
+        $initialCount = $model->states('state')->count();
+
+        $result = $model->transitionTo('state', TestState::Draft);
+
+        $this->assertTrue($result);
+
+        $this->assertEquals($initialCount, $model->states('state')->count());
+
+        $this->assertEquals(TestState::Draft->value, $model->fresh()->current_state);
+    }
 }
 
 enum TestState: string

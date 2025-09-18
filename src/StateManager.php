@@ -47,6 +47,10 @@ class StateManager
         $from = $this->getCurrentState($model, $field);
         $toValue = $this->extractStateValue($to);
 
+        if ($from === $toValue) {
+            return true;
+        }
+
         if (! $this->stateMachine->canTransition($from, $toValue)) {
             throw new InvalidStateTransitionException($from, $toValue, $field, get_class($model));
         }
@@ -78,7 +82,7 @@ class StateManager
 
             return true;
         } catch (\Exception $e) {
-            $model->setAttribute($field, $from);
+            $model->$field = $from;
             $model->save();
 
             throw $e;
