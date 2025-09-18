@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.0.3 - 2025-09-18
+
+### What's New
+
+This release handles the following:
+
+- Implements silent handling of the same state transitions in StateManager
+- Dynamically sets the model field instead of using `setAttribute`
+
+**Full Changelog**: https://github.com/nthndnn/laravel-state-history/compare/v1.0.2...v1.0.3
+
 ## v1.0.2 - 2025-08-25
 
 ### What's New
