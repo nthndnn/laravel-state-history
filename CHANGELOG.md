@@ -1,5 +1,19 @@
 # Changelog
 
+## v1.0.4 - 2026-02-08
+
+### What's Changed
+
+* Bump actions/github-script from 7 to 8 by @dependabot[bot] in https://github.com/nthndnn/laravel-state-history/pull/2
+* Bump stefanzweifel/git-auto-commit-action from 6 to 7 by @dependabot[bot] in https://github.com/nthndnn/laravel-state-history/pull/4
+* Bump actions/checkout from 5 to 6 by @dependabot[bot] in https://github.com/nthndnn/laravel-state-history/pull/6
+* Bump actions/upload-artifact from 4 to 6 by @dependabot[bot] in https://github.com/nthndnn/laravel-state-history/pull/8
+* Bump laravel/pint from 1.24.0 to 1.27.0 by @dependabot[bot] in https://github.com/nthndnn/laravel-state-history/pull/9
+* Add fallback support to StateManager for state transitions
+* Introduce StateTransitionFailedException for better error handling
+
+**Full Changelog**: https://github.com/nthndnn/laravel-state-history/compare/v1.0.3...v1.0.4
+
 ## v1.0.3 - 2025-09-18
 
 ### What's New
