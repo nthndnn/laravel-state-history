@@ -107,7 +107,6 @@ class StateManager
         if (Schema::hasColumn($model->getTable(), $currentColumn)) {
             $model->setAttribute($currentColumn, $toValue);
         } else {
-            // Fallback to base column if current column doesn't exist
             $model->setAttribute($field, $toValue);
         }
     }
@@ -139,7 +138,6 @@ class StateManager
             return $latestState;
         }
 
-        // Add fallback support
         if (config('state-history.fallback_to_base_column', true)) {
             $baseState = $model->getRawOriginal($field);
 
