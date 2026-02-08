@@ -3,7 +3,6 @@
 namespace NathanDunn\StateHistory;
 
 use BackedEnum;
-use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
@@ -99,6 +98,7 @@ class StateManager
     {
         if (! config('state-history.use_current_columns', true)) {
             $model->setAttribute($field, $toValue);
+
             return;
         }
 
@@ -142,6 +142,7 @@ class StateManager
         // Add fallback support
         if (config('state-history.fallback_to_base_column', true)) {
             $baseState = $model->getRawOriginal($field);
+
             return $baseState !== null && $baseState !== '' ? $baseState : null;
         }
 

@@ -18,7 +18,7 @@ class StateTransitionFailedException extends Exception
         $modelClass = get_class($model);
         $modelId = $model->getKey();
         $fromText = $from ?? 'null (new model)';
-        
+
         $message = sprintf(
             "State transition failed for %s (ID: %s) from '%s' to '%s' for field '%s'. Original error: %s",
             $modelClass,
