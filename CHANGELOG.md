@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.0.5 - 2026-02-08
+
+* Add fallback support to StateManager for state transitions
+* Introduce StateTransitionFailedException for better error handling
+
+**Full Changelog**: https://github.com/nthndnn/laravel-state-history/compare/v1.0.4...v1.0.5
+
 ## v1.0.4 - 2026-02-08
 
 ### What's Changed
