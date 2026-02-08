@@ -3,6 +3,7 @@
 namespace NathanDunn\StateHistory;
 
 use BackedEnum;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
@@ -14,6 +15,7 @@ use NathanDunn\StateHistory\Events\StateTransitioned;
 use NathanDunn\StateHistory\Events\StateTransitioning;
 use NathanDunn\StateHistory\Exceptions\InvalidStateTransitionException;
 use NathanDunn\StateHistory\Exceptions\StateTransitionBlockedException;
+use NathanDunn\StateHistory\Exceptions\StateTransitionFailedException;
 use NathanDunn\StateHistory\Models\StateHistory;
 use NathanDunn\StateHistory\Support\StateMachineConfig;
 
@@ -63,16 +65,16 @@ class StateManager
 
         Event::dispatch(new StateTransitioning($model, $field, $from, $toValue, $meta, $context));
 
+        $transitionLogic = function () use ($model, $field, $from, $toValue, $meta, $context) {
+            $model->refresh();
+
+            $this->syncStateColumn($model, $field, $toValue);
+            $model->save();
+            $this->recordStatusChange($model, $field, $from, $toValue, $meta, $context);
+        };
+
         try {
-            DB::transaction(function () use ($model, $field, $from, $toValue, $meta, $context) {
-                $model->refresh();
-
-                $this->updateCurrentColumn($model, $field, $toValue);
-
-                $model->save();
-
-                $this->recordStatusChange($model, $field, $from, $toValue, $meta, $context);
-            });
+            DB::transaction($transitionLogic);
 
             Event::dispatch(new StateTransitioned($model, $field, $from, $toValue, $meta, $context));
 
@@ -82,26 +84,31 @@ class StateManager
 
             return true;
         } catch (\Exception $e) {
-            $model->$field = $from;
-            $model->save();
+            if ($e instanceof InvalidStateTransitionException || $e instanceof StateTransitionBlockedException) {
+                throw $e;
+            }
 
-            throw $e;
+            throw new StateTransitionFailedException($model, $field, $from, $toValue, $e);
         }
     }
 
     /**
-     * Update the current column for a state field if it exists.
+     * Sync the state column (current column or base column depending on config).
      */
-    private function updateCurrentColumn(Model $model, string $field, string $to): void
+    protected function syncStateColumn(Model $model, string $field, string $toValue): void
     {
         if (! config('state-history.use_current_columns', true)) {
+            $model->setAttribute($field, $toValue);
             return;
         }
 
         $currentColumn = sprintf('%s%s', config('state-history.prefix', 'current_'), $field);
 
         if (Schema::hasColumn($model->getTable(), $currentColumn)) {
-            $model->setAttribute($currentColumn, $to);
+            $model->setAttribute($currentColumn, $toValue);
+        } else {
+            // Fallback to base column if current column doesn't exist
+            $model->setAttribute($field, $toValue);
         }
     }
 
@@ -128,7 +135,17 @@ class StateManager
             ->latest('created_at')
             ->value('to');
 
-        return $latestState;
+        if ($latestState !== null) {
+            return $latestState;
+        }
+
+        // Add fallback support
+        if (config('state-history.fallback_to_base_column', true)) {
+            $baseState = $model->getRawOriginal($field);
+            return $baseState !== null && $baseState !== '' ? $baseState : null;
+        }
+
+        return null;
     }
 
     protected function recordStatusChange(

@@ -48,4 +48,17 @@ return [
     */
 
     'model' => env('STATE_HISTORY_MODEL', \NathanDunn\StateHistory\Models\StateHistory::class),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Fallback to Base Column
+    |--------------------------------------------------------------------------
+    |
+    | When enabled, getCurrentState() will fall back to the model's base field
+    | column when no state history exists. This is useful for models that may
+    | not have state history records yet.
+    |
+    */
+
+    'fallback_to_base_column' => env('STATE_HISTORY_FALLBACK_TO_BASE_COLUMN', true),
 ];
