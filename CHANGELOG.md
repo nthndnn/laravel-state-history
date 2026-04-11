@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.0.6 - 2026-04-11
+
+### What's Changed
+
+* Add Laravel 13 support
+* Bump actions/upload-artifact from 6 to 7 by @dependabot[bot] in https://github.com/nthndnn/laravel-state-history/pull/11
+
+**Full Changelog**: https://github.com/nthndnn/laravel-state-history/compare/v1.0.5...v1.0.6
+
 ## v1.0.5 - 2026-02-08
 
 * Add fallback support to StateManager for state transitions
