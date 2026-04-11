@@ -3,6 +3,7 @@
 namespace NathanDunn\StateHistory\Tests;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use NathanDunn\StateHistory\Facades\StateHistory;
 use NathanDunn\StateHistory\StateHistoryServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 
@@ -20,7 +21,7 @@ abstract class TestCase extends Orchestra
     protected function getPackageAliases($app)
     {
         return [
-            'StateHistory' => \NathanDunn\StateHistory\Facades\StateHistory::class,
+            'StateHistory' => StateHistory::class,
         ];
     }
 

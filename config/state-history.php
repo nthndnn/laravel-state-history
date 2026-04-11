@@ -1,5 +1,7 @@
 <?php
 
+use NathanDunn\StateHistory\Models\StateHistory;
+
 return [
     /*
     |--------------------------------------------------------------------------
@@ -47,7 +49,7 @@ return [
     |
     */
 
-    'model' => env('STATE_HISTORY_MODEL', \NathanDunn\StateHistory\Models\StateHistory::class),
+    'model' => env('STATE_HISTORY_MODEL', StateHistory::class),
 
     /*
     |--------------------------------------------------------------------------

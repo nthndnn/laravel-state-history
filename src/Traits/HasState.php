@@ -176,7 +176,7 @@ trait HasState
                 if ($fieldConfig->hasCasts()) {
                     $castType = $fieldConfig->getCastType('to') ?: 'string';
 
-                    if (is_subclass_of($castType, \BackedEnum::class)) {
+                    if (is_subclass_of($castType, BackedEnum::class)) {
                         return $castType::from($rawState);
                     }
 

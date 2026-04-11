@@ -4,8 +4,11 @@ namespace NathanDunn\StateHistory\Tests\Feature;
 
 use BackedEnum;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Schema\Blueprint;
 use NathanDunn\StateHistory\Contracts\StateMachine;
+use NathanDunn\StateHistory\Exceptions\InvalidStateTransitionException;
+use NathanDunn\StateHistory\Models\StateHistory;
 use NathanDunn\StateHistory\Tests\TestCase;
 use NathanDunn\StateHistory\Traits\HasState;
 use NathanDunn\StateHistory\TransitionMap;
@@ -102,7 +105,7 @@ class HasStateTest extends TestCase
         $model->current_state = TestState::Draft->value;
         $model->save();
 
-        $this->expectException(\NathanDunn\StateHistory\Exceptions\InvalidStateTransitionException::class);
+        $this->expectException(InvalidStateTransitionException::class);
 
         $model->transitionTo('state', TestState::Archived);
     }
@@ -269,7 +272,7 @@ class HasStateTest extends TestCase
     {
         // Test that the package uses the configured model class
         $this->assertEquals(
-            \NathanDunn\StateHistory\Models\StateHistory::class,
+            StateHistory::class,
             config('state-history.model')
         );
 
@@ -279,7 +282,7 @@ class HasStateTest extends TestCase
         $model->save();
 
         $states = $model->states('state');
-        $this->assertInstanceOf(\Illuminate\Database\Eloquent\Relations\MorphMany::class, $states);
+        $this->assertInstanceOf(MorphMany::class, $states);
 
         // Verify the related model class is correct
         $relatedModel = $states->getRelated();
