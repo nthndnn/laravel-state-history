@@ -11,7 +11,7 @@ A Laravel package for managing **enum-based model states** with enforced transit
 - **Atomic Operations** – state change + history in one transaction
 - **Current State Columns** (`current_{field}`) for indexing & querying
 - **Events, Guards & Effects** for lifecycle hooks
-- **Laravel 11–12 Support**
+- **Laravel 11–13 Support**
 
 ## Installation
 

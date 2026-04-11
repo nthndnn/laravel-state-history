@@ -8,15 +8,32 @@ on:
 
 jobs:
   test:
-    name: Test on PHP ${{ matrix.php-version }} with Laravel ${{ matrix.laravel-version }}
+    name: Test on PHP ${{ matrix.php-version }} with Laravel ${{ matrix.laravel }}
 
     runs-on: ubuntu-latest
 
     strategy:
       fail-fast: false
       matrix:
-        php-version: [8.2, 8.3]
-        laravel-version: [11.*, 12.*]
+        include:
+          - php-version: '8.2'
+            laravel: '11.*'
+            testbench: '9.*'
+          - php-version: '8.3'
+            laravel: '11.*'
+            testbench: '9.*'
+          - php-version: '8.2'
+            laravel: '12.*'
+            testbench: '10.*'
+          - php-version: '8.3'
+            laravel: '12.*'
+            testbench: '10.*'
+          - php-version: '8.3'
+            laravel: '13.*'
+            testbench: '11.*'
+          - php-version: '8.4'
+            laravel: '13.*'
+            testbench: '11.*'
 
     steps:
       - name: Checkout code
@@ -30,7 +47,9 @@ jobs:
           coverage: none
 
       - name: Install dependencies
-        run: composer install --prefer-dist --no-interaction
+        run: |
+          composer update --no-install --prefer-dist --no-interaction
+          composer update "laravel/framework:${{ matrix.laravel }}" "illuminate/database:${{ matrix.laravel }}" "illuminate/support:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --with-all-dependencies --prefer-dist --no-interaction
 
       - name: Check code formatting
         run: composer format-test
@@ -42,7 +61,7 @@ jobs:
         uses: actions/upload-artifact@v6
         if: always()
         with:
-          name: test-results-php-${{ matrix.php-version }}-laravel-${{ matrix.laravel-version }}
+          name: test-results-php-${{ matrix.php-version }}-laravel-${{ matrix.laravel }}
           path: |
             .phpunit.result.cache
             .phpunit.result.xml
