@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.1.0 - 2026-11-14
+
+### What's Changed
+
+* Fix non-deterministic latest-state resolution when `created_at` timestamps collide by @nthndnn in https://github.com/nthndnn/laravel-state-history/pull/15
+* Drop Laravel 11 support; package now supports Laravel 12–13
+* Bump actions/checkout from 6 to 7 by @dependabot[bot] in https://github.com/nthndnn/laravel-state-history/pull/14
+* Bump actions/github-script from 8 to 9 by @dependabot[bot] in https://github.com/nthndnn/laravel-state-history/pull/13
+
+**Full Changelog**: https://github.com/nthndnn/laravel-state-history/compare/v1.0.6...v1.1.0
+
 ## v1.0.6 - 2026-04-11
 
 ### What's Changed
