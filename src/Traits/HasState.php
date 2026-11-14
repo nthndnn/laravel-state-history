@@ -59,7 +59,8 @@ trait HasState
     {
         return $this->morphMany(config('state-history.model'), 'model')
             ->forField($field)
-            ->orderBy('created_at', 'desc');
+            ->orderByDesc('created_at')
+            ->orderByDesc('id');
     }
 
     /**
@@ -132,7 +133,14 @@ trait HasState
     }
 
     /**
-     * Get the current state for a field, checking current column first, then falling back to latest history.
+     * Get the current state for a field.
+     *
+     * Precedence: a non-null current_{field} when current columns are enabled
+     * and the column exists; otherwise the base column when it is non-null;
+     * otherwise the latest history record (created_at desc, id desc).
+     *
+     * Transitions resolve state through StateManager, which reads history
+     * before the base column and honours fallback_to_base_column.
      */
     public function getCurrentState(string $field): ?string
     {
