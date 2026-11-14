@@ -17,12 +17,6 @@ jobs:
       matrix:
         include:
           - php-version: '8.2'
-            laravel: '11.*'
-            testbench: '9.*'
-          - php-version: '8.3'
-            laravel: '11.*'
-            testbench: '9.*'
-          - php-version: '8.2'
             laravel: '12.*'
             testbench: '10.*'
           - php-version: '8.3'
@@ -48,7 +42,6 @@ jobs:
 
       - name: Install dependencies
         run: |
-          composer update --no-install --prefer-dist --no-interaction
           composer update "laravel/framework:${{ matrix.laravel }}" "illuminate/database:${{ matrix.laravel }}" "illuminate/support:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --with-all-dependencies --prefer-dist --no-interaction
 
       - name: Check code formatting
