@@ -42,6 +42,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+          composer update --no-install --prefer-dist --no-interaction
           composer update "laravel/framework:${{ matrix.laravel }}" "illuminate/database:${{ matrix.laravel }}" "illuminate/support:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --with-all-dependencies --prefer-dist --no-interaction
 
       - name: Check code formatting
