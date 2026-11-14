@@ -112,7 +112,12 @@ class StateManager
     }
 
     /**
-     * Get the current state for a field, checking current column first, then falling back to latest history.
+     * Get the current state for a field.
+     *
+     * Precedence: a non-null current_{field} when current columns are enabled
+     * and the column exists; otherwise the latest state_histories.to
+     * (created_at desc, id desc); otherwise the base column when
+     * fallback_to_base_column is enabled.
      */
     protected function getCurrentState(Model $model, string $field): ?string
     {
@@ -131,7 +136,8 @@ class StateManager
             ->where('model_type', get_class($model))
             ->where('model_id', $model->getKey())
             ->where('field', $field)
-            ->latest('created_at')
+            ->orderByDesc('created_at')
+            ->orderByDesc('id')
             ->value('to');
 
         if ($latestState !== null) {
